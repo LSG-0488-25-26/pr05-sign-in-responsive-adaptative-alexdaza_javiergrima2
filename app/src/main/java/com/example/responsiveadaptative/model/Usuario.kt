@@ -1,12 +1,14 @@
 package com.example.responsiveadaptative.model
 
 data class Usuario(
-    var nombre_completo: String,
-    var data_nacimiento: String,
+    var nombre: String,
+    var apellido: String,
+    var apellido2: String,
+    var fechaNacimiento: String,
     var email: String,
-    var telefono: Int,
-    val nombre_usuario: String,
+    var telefono: String,
+    val nombreUsuario: String,
     val contraseña: String,
-    val confirmar_contraseña: String,
-    var terminos_aceptados: Boolean = false,
+    val confirmarContrasena: String,
+    var terminosAceptados: Boolean = false
 )
