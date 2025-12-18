@@ -4,14 +4,17 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.example.responsiveadaptative.ui.theme.ResponsiveAdaptativeTheme
+import com.example.responsiveadaptative.view.Routes
+import com.example.responsiveadaptative.view.CrearCuenta
+import com.example.responsiveadaptative.view.IniciarSesion
+
+
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -19,29 +22,39 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             ResponsiveAdaptativeTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
+                Main()
                 }
             }
         }
     }
-}
+
 
 @Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
+fun Main() {
+
+    val navigationController = rememberNavController()
+
+    NavHost(
+        navController = navigationController,
+        startDestination = Routes.CrearCuenta.route
+    ) {
+
+        composable(Routes.CrearCuenta.route){
+            CrearCuenta(navigationController)
+        }
+
+        composable(Routes.IniciarSesion.route){
+            IniciarSesion(navigationController)
+        }
+
+    }
 }
+
 
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {
     ResponsiveAdaptativeTheme {
-        Greeting("Android")
+        Main()
     }
 }
