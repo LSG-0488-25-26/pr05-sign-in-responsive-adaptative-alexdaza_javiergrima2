@@ -36,17 +36,15 @@ fun Main() {
 
     NavHost(
         navController = navigationController,
-        startDestination = Routes.CrearCuenta.route
+        startDestination = Routes.IniciarSesion.route
     ) {
-
-        composable(Routes.CrearCuenta.route){
-            CrearCuenta(navigationController)
-        }
-
         composable(Routes.IniciarSesion.route){
             IniciarSesion(navigationController)
         }
 
+        composable(Routes.CrearCuenta.route){
+            CrearCuenta(navigationController)
+        }
     }
 }
 
