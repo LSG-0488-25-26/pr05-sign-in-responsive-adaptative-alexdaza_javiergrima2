@@ -1,65 +1,57 @@
 package com.example.responsiveadaptative.viewmodel
 
+import androidx.compose.runtime.mutableStateOf
+import androidx.lifecycle.ViewModel
 import com.example.responsiveadaptative.model.Usuario
 
-class Formulario {
+class Formulario : ViewModel() {
+
+    var nombre = mutableStateOf("")
+    var apellido = mutableStateOf("")
+    var apellido2 = mutableStateOf("")
+    var fechaNacimiento = mutableStateOf("")
+    var email = mutableStateOf("")
+    var telefono = mutableStateOf("")
+    var nombreUsuario = mutableStateOf("")
+    var contraseña = mutableStateOf("")
+    var confirmarContrasena = mutableStateOf("")
+    var terminosAceptados = mutableStateOf(false)
 
     private val listaUsuarios = mutableListOf<Usuario>()
 
-    fun login(
-        nombre: String,
-        apellido: String,
-        apellido2: String,
-        fechaNacimiento: String,
-        email: String,
-        telefono: String,
-        nombreUsuario: String,
-        contraseña: String,
-        confirmarContrasena: String,
-        terminosAceptados: Boolean = false
-    ): Boolean {
+    fun validarFormulario(): Boolean {
+        return nombre.value.isNotBlank() &&
+                apellido.value.isNotBlank() &&
+                fechaNacimiento.value.isNotBlank() &&
+                email.value.contains("@") &&
+                telefono.value.all { it.isDigit() } &&
+                contraseña.value == confirmarContrasena.value &&
+                terminosAceptados.value
+    }
 
-        if (
-            nombre.isBlank() ||
-            apellido.isBlank() ||
-            fechaNacimiento.isBlank() ||
-            email.isBlank() ||
-            telefono.isBlank() ||
-            nombreUsuario.isBlank() ||
-            contraseña.isBlank() ||
-            confirmarContrasena.isBlank() ||
-            !terminosAceptados
-        ) {
-            println("Todos los campos son obligatorios")
-            return false
-        }
+    fun registrarUsuario(): Boolean {
+        if (!validarFormulario()) return false
 
-        if (!terminosAceptados) {
-            println("Debes aceptar los términos")
-            return false
-        }
-
-        if (contraseña != confirmarContrasena) {
-            println("Las contraseñas no coinciden")
-            return false
-        }
-
-        val usuario = Usuario(
-            nombre,
-            apellido,
-            apellido2,
-            fechaNacimiento,
-            email,
-            telefono,
-            nombreUsuario,
-            contraseña,
-            confirmarContrasena,
-            terminosAceptados
+        listaUsuarios.add(
+            Usuario(
+                nombre = nombre.value,
+                apellido = apellido.value,
+                apellido2 = apellido2.value,
+                fechaNacimiento = fechaNacimiento.value,
+                email = email.value,
+                telefono = telefono.value,
+                nombreUsuario = nombreUsuario.value,
+                contraseña = contraseña.value,
+                confirmarContrasena = confirmarContrasena.value,
+                terminosAceptados = terminosAceptados.value
+            )
         )
-
-        listaUsuarios.add(usuario)
-
-        println("Usuario registrado correctamente.")
         return true
+    }
+
+    fun login(usuario: String, pass: String): Boolean {
+        return listaUsuarios.any {
+            it.nombreUsuario == usuario && it.contraseña == pass
+        }
     }
 }
