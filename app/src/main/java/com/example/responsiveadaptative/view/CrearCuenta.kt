@@ -3,6 +3,8 @@ package com.example.responsiveadaptative.view
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -19,9 +21,9 @@ import com.example.responsiveadaptative.viewmodel.Formulario
 @Composable
 fun CrearCuenta(navigationController: NavHostController, formulario: Formulario = viewModel()) {
 
-    var registrado by remember { mutableStateOf(false) }
+    var registroExitoso by remember { mutableStateOf(false) }
 
-    if (registrado) {
+    if (registroExitoso) {
         Column(
             modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.Center,
@@ -29,7 +31,9 @@ fun CrearCuenta(navigationController: NavHostController, formulario: Formulario 
         ) {
             Text("Usuario registrado correctamente")
             Spacer(modifier = Modifier.height(16.dp))
-            Button(onClick = { navigationController.navigate(Routes.IniciarSesion.route) }) {
+            Button(onClick = {
+                navigationController.navigate(Routes.IniciarSesion.route)
+            }) {
                 Text("Ir a Login")
             }
         }
@@ -38,34 +42,51 @@ fun CrearCuenta(navigationController: NavHostController, formulario: Formulario 
         BoxWithConstraints(modifier = Modifier.fillMaxSize()) {
 
             val isCompact = maxWidth < 600.dp
-            val isMedium = maxWidth in 600.dp..840.dp
-            val isExpanded = maxWidth > 840.dp
 
             Column(
                 modifier = Modifier.fillMaxSize()
             ) {
 
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp),
-                    verticalAlignment = Alignment.CenterVertically
+                Surface(
+                    tonalElevation = 4.dp
                 ) {
-                    Image(
-                        painter = painterResource(id = R.drawable.logogym),
-                        contentDescription = "Logo",
-                        modifier = Modifier.size(40.dp)
-                    )
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Column {
-                        Text(
-                            text = "GymApp",
-                            style = MaterialTheme.typography.headlineSmall
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(120.dp)
+                            .padding(horizontal = 16.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+
+                        IconButton(onClick = {
+                            navigationController.navigate(Routes.IniciarSesion.route)
+                        }) {
+                            Icon(
+                                imageVector = Icons.Filled.ArrowBack,
+                                contentDescription = "Volver"
+                            )
+                        }
+
+                        Image(
+                            painter = painterResource(id = R.drawable.logogym),
+                            contentDescription = "Logo",
+                            modifier = Modifier.size(120.dp)
                         )
-                        Text(
-                            text = "Tu gimnasio de confianza",
-                            style = MaterialTheme.typography.bodyMedium
-                        )
+
+                        Spacer(modifier = Modifier.width(12.dp))
+
+                        Column {
+                            Text(
+                                text = "NeoFit",
+                                style = MaterialTheme.typography.headlineMedium
+                            )
+                            if (!isCompact) {
+                                Text(
+                                    text = "Tu gimnasio de confianza",
+                                    style = MaterialTheme.typography.bodyLarge
+                                )
+                            }
+                        }
                     }
                 }
 
@@ -151,7 +172,9 @@ fun CrearCuenta(navigationController: NavHostController, formulario: Formulario 
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Checkbox(
                             checked = formulario.terminosAceptados.value,
-                            onCheckedChange = { formulario.terminosAceptados.value = it }
+                            onCheckedChange = {
+                                formulario.terminosAceptados.value = it
+                            }
                         )
                         Text("Acepto los términos y condiciones")
                     }
@@ -161,7 +184,7 @@ fun CrearCuenta(navigationController: NavHostController, formulario: Formulario 
                     Button(
                         onClick = {
                             if (formulario.registrarUsuario()) {
-                                registrado = true
+                                registroExitoso = true
                             }
                         },
                         modifier = Modifier.fillMaxWidth()
