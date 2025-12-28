@@ -18,8 +18,10 @@ import androidx.navigation.NavHostController
 import com.example.responsiveadaptative.viewmodel.Formulario
 
 @Composable
-fun CrearCuenta(navigationController: NavHostController, formulario: Formulario = viewModel()) {
+fun CrearCuenta(navigationController: NavHostController, formulario: Formulario) {
     var registrado by remember { mutableStateOf(false) }
+    var error by remember { mutableStateOf(false) }
+
     val scrollState = rememberScrollState()
 
     if (registrado) {
@@ -31,7 +33,9 @@ fun CrearCuenta(navigationController: NavHostController, formulario: Formulario 
             Text("Usuario registrado correctamente")
             Spacer(modifier = Modifier.height(16.dp))
             Button(
-                onClick = { navigationController.navigate(Routes.IniciarSesion.route) }
+                onClick = {
+                    navigationController.navigate(Routes.IniciarSesion.route)
+                }
             ) {
                 Text("Ir a Login")
             }
@@ -48,12 +52,12 @@ fun CrearCuenta(navigationController: NavHostController, formulario: Formulario 
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
 
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    IconButton(
-                        onClick = { navigationController.popBackStack() }
-                    ) {
-                        Icon(Icons.Default.ArrowBack, contentDescription = null)
+                IconButton(
+                    onClick = {
+                        navigationController.navigate(Routes.IniciarSesion.route)
                     }
+                ) {
+                    Icon(Icons.Default.ArrowBack, contentDescription = null)
                 }
 
                 Banner()
@@ -137,10 +141,20 @@ fun CrearCuenta(navigationController: NavHostController, formulario: Formulario 
                     Text("Acepto los términos y condiciones")
                 }
 
+                if (error) {
+                    Text(
+                        text = "Revisa los datos y acepta los términos",
+                        color = MaterialTheme.colorScheme.error
+                    )
+                }
+
                 Button(
                     onClick = {
                         if (formulario.registrarUsuario()) {
                             registrado = true
+                            error = false
+                        } else {
+                            error = true
                         }
                     },
                     modifier = Modifier.fillMaxWidth()
